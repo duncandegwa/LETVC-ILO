@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Users, UserCheck, Briefcase, FileText,
   Settings, LogOut, Menu, X, Moon, Sun, Bell, ChevronDown,
-  ClipboardList, BarChart3, BookOpen, Shield
+  ClipboardList, BarChart3, BookOpen, Shield, MessageCircle
 } from 'lucide-react';
 import { cn } from '@/utils/helpers';
 import { useAuth } from '@/contexts/AuthContext';
@@ -33,6 +33,7 @@ const navItems: NavItem[] = [
   { label: 'My Attachment', href: '/dashboard/my-attachment', icon: <ClipboardList className="w-5 h-5" />, roles: ['student'] },
   { label: 'My Trainer', href: '/dashboard/my-trainer', icon: <UserCheck className="w-5 h-5" />, roles: ['student'] },
   { label: 'My Assessment', href: '/dashboard/my-assessment', icon: <FileText className="w-5 h-5" />, roles: ['student'] },
+  { label: 'Chat', href: '/dashboard/chat', icon: <MessageCircle className="w-5 h-5" />, roles: ['student', 'trainer'] },
   { label: 'Settings', href: '/dashboard/settings', icon: <Settings className="w-5 h-5" />, roles: ['admin', 'trainer', 'student'] },
 ];
 
@@ -42,6 +43,50 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [chatUnread, setChatUnread] = useState(0);
+
+  // Poll unread chat count every 15 s for student/trainer
+  React.useEffect(() => {
+    if (!authUser || authUser.role === 'admin') return;
+    const role = authUser.role;
+    const senderRole = role === 'student' ? 'trainer' : 'student';
+
+    const fetchUnread = async () => {
+      try {
+        const { supabase } = await import('@/lib/supabase');
+
+        if (role === 'student') {
+          const { data: ur } = await supabase.from('users').select('id').eq('email', authUser.email).single();
+          if (!ur) return;
+          const { data: st } = await supabase.from('students').select('id').eq('user_id', ur.id).single();
+          if (!st) return;
+          const { data: conv } = await supabase.from('chat_conversations').select('id').eq('student_id', st.id).maybeSingle();
+          if (!conv) { setChatUnread(0); return; }
+          const { count } = await supabase.from('chat_messages').select('id', { count: 'exact', head: true })
+            .eq('conversation_id', conv.id).eq('sender_role', senderRole).eq('is_read', false);
+          setChatUnread(count || 0);
+        } else {
+          const { data: ur } = await supabase.from('users').select('id').eq('email', authUser.email).single();
+          if (!ur) return;
+          const { data: tr } = await supabase.from('trainers').select('id').eq('user_id', ur.id).single();
+          if (!tr) return;
+          const { data: convs } = await supabase.from('chat_conversations').select('id').eq('trainer_id', tr.id);
+          if (!convs || convs.length === 0) { setChatUnread(0); return; }
+          let total = 0;
+          for (const c of convs) {
+            const { count } = await supabase.from('chat_messages').select('id', { count: 'exact', head: true })
+              .eq('conversation_id', c.id).eq('sender_role', senderRole).eq('is_read', false);
+            total += count || 0;
+          }
+          setChatUnread(total);
+        }
+      } catch { /* ignore */ }
+    };
+
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 15000);
+    return () => clearInterval(interval);
+  }, [authUser]);
 
   const role = authUser?.role || 'student';
   const filteredNav = navItems.filter(item => item.roles.includes(role));
@@ -106,7 +151,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 )}
               >
                 {item.icon}
-                {item.label}
+                <span className="flex-1">{item.label}</span>
+                {item.href === '/dashboard/chat' && chatUnread > 0 && (
+                  <span className="ml-auto w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                    {chatUnread > 9 ? '9+' : chatUnread}
+                  </span>
+                )}
               </Link>
             );
           })}

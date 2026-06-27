@@ -130,3 +130,27 @@ export interface StudentWithDetails extends Student {
   assignment?: TrainerAssignment & { trainer: Trainer };
   assessment?: Assessment;
 }
+
+// ─── CHAT ────────────────────────────────────────────────────
+
+export interface ChatConversation {
+  id: string;
+  student_id: string;
+  trainer_id: string;
+  created_at: string;
+  updated_at: string;
+  student?: Student;
+  trainer?: Trainer;
+  last_message?: ChatMessage;
+  unread_count?: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  conversation_id: string;
+  sender_id: string;       // Supabase user id
+  sender_role: 'student' | 'trainer';
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
