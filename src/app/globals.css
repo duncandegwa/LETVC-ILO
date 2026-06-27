@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-letvc-green: #4a7c2f;
+  --color-letvc-green-dark: #3d6827;
+  --color-letvc-amber: #d4a017;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #374151;
+}
