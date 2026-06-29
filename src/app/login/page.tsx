@@ -175,7 +175,7 @@ export default function LoginPage() {
                     <input
                       {...loginForm.register('email')}
                       type="email"
-                      placeholder="you@letvc.ac.ke"
+                      placeholder="youremail@gmail.com"
                       className={cn(
                         'w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition-colors',
                         'bg-white dark:bg-gray-800 text-gray-900 dark:text-white',
