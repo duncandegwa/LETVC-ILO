@@ -66,3 +66,8 @@ CREATE POLICY "Service role full access - chat_messages"
 -- OR run:
 ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
 ALTER PUBLICATION supabase_realtime ADD TABLE chat_conversations;
+
+-- ─── ENABLE REALTIME FOR ASSESSMENTS ─────────────────────────
+-- This allows the student's My Assessment page to update
+-- automatically the moment a trainer marks them as assessed.
+ALTER PUBLICATION supabase_realtime ADD TABLE assessments;
