@@ -252,7 +252,7 @@ export default function StudentsPage() {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Admission Number" {...form.register('admission_number')} error={form.formState.errors.admission_number?.message} required placeholder="e.g. ADM/2024/001" />
+            <Input label="Admission Number" {...form.register('admission_number')} error={form.formState.errors.admission_number?.message} required placeholder="e.g. CFB/S23/001" />
             <Input label="Full Name" {...form.register('full_name')} error={form.formState.errors.full_name?.message} required />
             <Input label="National ID" {...form.register('national_id')} error={form.formState.errors.national_id?.message} required />
             <Select label="Gender" {...form.register('gender')} error={form.formState.errors.gender?.message} required
@@ -262,9 +262,9 @@ export default function StudentsPage() {
             <Select label="Course" {...form.register('course')} error={form.formState.errors.course?.message} required
               options={ALL_COURSES.map(c => ({ value: c, label: c }))} placeholder="Select course" />
             <Input label="Email Address" type="email" {...form.register('email')} error={form.formState.errors.email?.message} required />
-            <Input label="Phone Number" {...form.register('phone_number')} error={form.formState.errors.phone_number?.message} required placeholder="+254..." />
+            <Input label="Phone Number" {...form.register('phone_number')} error={form.formState.errors.phone_number?.message} required placeholder="+254700000000" />
             <Input label="Academic Year" {...form.register('academic_year')} error={form.formState.errors.academic_year?.message} required placeholder="e.g. Year 2" />
-            <Input label="Class" {...form.register('class_name')} error={form.formState.errors.class_name?.message} required placeholder="e.g. EE/3A" />
+            <Input label="Class" {...form.register('class_name')} error={form.formState.errors.class_name?.message} required placeholder="e.g. CFB/S25" />
             <Select label="Status" {...form.register('status')} options={[{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]} />
           </div>
 

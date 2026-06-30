@@ -120,7 +120,7 @@ function LoginPageContent() {
           <div className="space-y-4">
             {[
               { label: 'Student Placement Tracking', desc: 'Monitor every attached student in real-time' },
-              { label: 'Trainer Assignment', desc: 'Match students with the right supervisors' },
+              { label: 'Trainer Assignment', desc: 'Match students with the right assessors' },
               { label: 'Assessment Management', desc: 'Track assessment status and reports' },
             ].map(item => (
               <div key={item.label} className="flex items-start gap-3">
@@ -184,7 +184,7 @@ function LoginPageContent() {
                     <input
                       {...loginForm.register('email')}
                       type="email"
-                      placeholder="you@letvc.ac.ke"
+                      placeholder="youremail.@gmail.com"
                       className={cn(
                         'w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition-colors',
                         'bg-white dark:bg-gray-800 text-gray-900 dark:text-white',
