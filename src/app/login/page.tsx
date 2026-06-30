@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,9 +25,11 @@ const resetSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 type ResetForm = z.infer<typeof resetSchema>;
 
-export default function LoginPage() {
+function LoginPageContent() {
   const { authUser, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionExpired = searchParams.get('expired') === '1';
   const { theme, toggleTheme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,6 +161,13 @@ export default function LoginPage() {
           {mode === 'login' ? (
             <>
               <div className="mb-8">
+                {sessionExpired && (
+                  <div className="mb-5 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl">
+                    <p className="text-sm text-amber-700 dark:text-amber-400">
+                      You were signed out due to inactivity. Please sign in again.
+                    </p>
+                  </div>
+                )}
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                   Sign in to your LETVC ILO account to continue.
@@ -175,7 +184,7 @@ export default function LoginPage() {
                     <input
                       {...loginForm.register('email')}
                       type="email"
-                      placeholder="youremail@gmail.com"
+                      placeholder="you@letvc.ac.ke"
                       className={cn(
                         'w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition-colors',
                         'bg-white dark:bg-gray-800 text-gray-900 dark:text-white',
@@ -333,5 +342,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="w-8 h-8 border-4 border-[#4a7c2f] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <LoginPageContent />
+    </Suspense>
   );
 }

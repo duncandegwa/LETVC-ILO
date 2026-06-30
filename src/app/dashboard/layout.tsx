@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { SessionTimeoutModal } from '@/components/ui/SessionTimeoutModal';
 import { Loader2 } from 'lucide-react';
 
 export default function DashboardRootLayout({ children }: { children: React.ReactNode }) {
@@ -29,5 +30,10 @@ export default function DashboardRootLayout({ children }: { children: React.Reac
 
   if (!authUser) return null;
 
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <>
+      <DashboardLayout>{children}</DashboardLayout>
+      <SessionTimeoutModal />
+    </>
+  );
 }

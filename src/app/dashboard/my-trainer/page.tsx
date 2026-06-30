@@ -199,7 +199,7 @@ export default function MyTrainerPage() {
 
           <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-700">
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              Your trainer will visit your workplace to conduct your assessment. 
+              Your trainer will visit your workplace to conduct your assessment. Contact the ILO office if you need to change your trainer.
             </p>
           </div>
         </Card>

@@ -387,6 +387,20 @@ The trainer will see the student in their **My Students** list.
 
 ---
 
+## Session Timeout
+
+All users — Administrators, Trainers, and Students — are automatically signed out after **30 minutes of inactivity** for security.
+
+How it works:
+- The timer resets on any mouse movement, click, keypress, scroll, or touch
+- At the 28-minute mark (2 minutes before timeout), a warning popup appears showing a live countdown
+- The user can click **Stay Signed In** to reset the timer, or **Sign Out Now** to log out immediately
+- If no action is taken, the system automatically signs the user out and redirects to the login page with a message explaining why
+
+This applies on every dashboard page across all three roles.
+
+---
+
 ## Troubleshooting
 
 **Login fails saying invalid credential**
